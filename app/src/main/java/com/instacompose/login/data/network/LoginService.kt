@@ -1,16 +1,18 @@
 package com.instacompose.login.data.network
 
-import com.instacompose.core.network.RetrofitHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.create
+import retrofit2.Retrofit
+import javax.inject.Inject
 
-class LoginService {
-    private val retrofit = RetrofitHelper.getRetrofit()
+class LoginService @Inject constructor(
+    private val retrofit: Retrofit,
+    private val loginClient: LoginClient
+) {
 
     suspend fun doLogin(): Boolean{
         return withContext(Dispatchers.IO){
-            val response = retrofit.create(LoginClient::class.java).doLogin()
+            val response = loginClient.doLogin()
             response.body()?.success ?: false
         }
     }
